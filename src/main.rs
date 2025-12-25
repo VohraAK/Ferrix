@@ -10,7 +10,6 @@ fn panic(_info: &PanicInfo) -> !
 }
 
 #[unsafe(no_mangle)]    // DO NOT mangle name of this function!
-
 // entry point for the linker (looks for _start)
 pub extern "C" fn _start() -> ! 
 {
