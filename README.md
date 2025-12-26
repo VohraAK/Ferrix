@@ -13,4 +13,12 @@ Inspired by: [Blog OS](os.phil-opp.com) by Philipp Oppermann.
 
 ![alt text](assets/vga_qemu.jpeg)
 
+
+### Custom Testing Framework
+- Built a custom testing harness using Rust's `custom_test_frameworks` feature, as we're on bare metal.
+- Tests communicate results through a serial port interface and automatically exit QEMU with success/failure codes.
+
+<br>
+
+![alt text](assets/test_trivial.jpeg)
 ---

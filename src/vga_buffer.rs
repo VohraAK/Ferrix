@@ -40,12 +40,14 @@ impl fmt::Write for Writer
 
 // redefining print and println macros to use our implementation of fmt::Write trait
 #[macro_export]
-macro_rules! print {
+macro_rules! print 
+{
     ($($arg:tt)*) => ($crate::vga_buffer::_print(format_args!($($arg)*)));
 }
 
 #[macro_export]
-macro_rules! println {
+macro_rules! println 
+{
     () => ($crate::print!("\n"));
     ($($arg:tt)*) => ($crate::print!("{}\n", format_args!($($arg)*)));
 }
@@ -250,4 +252,35 @@ pub fn splash_screen()
     println!("   [OK] Kernel loaded successfully");
     println!();
     println!(" ------------------------------------------------------------------------------ ");
+}
+
+
+
+
+// ---------- TESTS ----------
+#[test_case]
+fn test_println_simple() 
+{
+    println!("test_println_simple output");
+}
+
+#[test_case]
+fn test_println_many() 
+{
+    for _ in 0..200 {
+        println!("test_println_many output");
+    }
+}
+
+#[test_case]
+fn test_println_output() 
+{
+    let s = "Some test string that fits on a single line";
+    println!("{}", s);
+
+    for (i, c) in s.chars().enumerate() 
+    {
+        let screen_char = WRITER.lock().buffer.buf[VGA_HEIGHT - 2][i].read();
+        assert_eq!(char::from(screen_char.char), c);
+    }
 }
