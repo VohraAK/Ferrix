@@ -9,16 +9,28 @@ Inspired by: [Blog OS](os.phil-opp.com) by Philipp Oppermann.
 - Implemented a VGA text buffer driver that writes directly to memory address `0xb8000` to display colored text on screen. 
 - The `print!` and `println!` macros were overridden to use the custom VGA writer via the [`core::fmt::Write`](https://doc.rust-lang.org/core/fmt/trait.Write.html) trait, enabling formatted text output directly to the screen.
 
+
+![QEMU VGA Outputs](assets/vga_qemu.jpeg)
+
 <br>
-
-![alt text](assets/vga_qemu.jpeg)
-
 
 ### Custom Testing Framework
 - Built a custom testing harness using Rust's `custom_test_frameworks` feature, as we're on bare metal.
 - Tests communicate results through a serial port interface and automatically exit QEMU with success/failure codes.
 
+
+![QEMU Trivial Test Outputs](assets/test_trivial.jpeg)
+
 <br>
 
-![alt text](assets/test_trivial.jpeg)
+### IDT and Basic CPU Exceptions Setup
+- Used the `x86_64` crate to initialise an Interrupt Descriptor Table.
+- Added a breakpoint exception handler (triggered by `int3`).
+
+![QEMU Breakpoint Exception Output (cargo run)](assets/breakpoint_exception_test.png)
+
+- Added padding and color in test outputs (via `cargo test`).
+
+![Improved Test Outputs](assets/improved_test_outputs.png)
+
 ---

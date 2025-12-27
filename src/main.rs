@@ -15,7 +15,13 @@ pub extern "C" fn _start() -> !
 {
     vga_buffer::splash_screen();
 
-    // add tests entry point
+    // initialise IDT
+    init();
+
+    // BREAKPOINT TEST (trigger int3)
+    x86_64::instructions::interrupts::int3();
+
+    // TESTS ENTRY POINT
     #[cfg(test)]
     test_main();
     

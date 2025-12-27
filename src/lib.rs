@@ -1,83 +1,103 @@
 #![no_std]
-
+#![feature(abi_x86_interrupt)]
 #![cfg_attr(test, no_main)]
 #![feature(custom_test_frameworks)]
 #![test_runner(crate::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
+// =========================
+// Imports and Modules
+// =========================
 use core::panic::PanicInfo;
 pub mod serial;
 pub mod vga_buffer;
+pub mod interrupts;
 
+// =========================
+// Constants and Enums
+// =========================
 const QEMU_IOBASE: u16 = 0xf4;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u32)]
-pub enum QemuExitCode
+pub enum QemuExitCode 
 {
     Success = 0x10,
-    Failure = 0x11
-}                   // fun fact: Rust stores enums as tagged unions by default, we need to convert it into a u32 C-sized enum
+    Failure = 0x11,
+} // Rust stores enums as tagged unions by default, we need to convert it into a u32 C-sized enum
 
-
-// this function comands the QEMU instance to close itself
-pub fn qemu_close(exit_code: QemuExitCode)
+// =========================
+// Lib Functions
+// =========================
+pub fn qemu_close(exit_code: QemuExitCode) 
 {
     use x86_64::instructions::port::Port;
-
-    unsafe
+    unsafe 
     {
         let mut port = Port::new(QEMU_IOBASE);
         port.write(exit_code as u32);
     }
 }
 
-
-pub trait Testable 
+pub fn init()
 {
-    fn run(&self) -> ();
+    interrupts::init_idt();
+}
+
+// =========================
+// Test Framework
+// =========================
+pub trait Testable {
+    fn run(&self, width: usize);
+    fn name(&self) -> &'static str;
 }
 
 impl<T> Testable for T
 where
     T: Fn(),
 {
-    fn run(&self) 
-    {
-        serial_print!("{}...\t", core::any::type_name::<T>());
+    fn run(&self, width: usize) {
+        let name = core::any::type_name::<T>();
+        serial_print!("{:<width$} ... ", name, width = width);
         self();
-        serial_println!("[ok]");
+        serial_println!("\x1b[32m[ok]\x1b[0m");
+    }
+    fn name(&self) -> &'static str {
+        core::any::type_name::<T>()
     }
 }
 
-pub fn test_runner(_tests: &[&dyn Testable]) { // new
+pub fn test_runner(_tests: &[&dyn Testable]) 
+{
     serial_println!("Running {} tests", _tests.len());
-
-    for test in _tests 
-    {
-        test.run();
+    // Find the maximum test name length
+    let max_width = _tests.iter().map(|t| t.name().len()).max().unwrap_or(0);
+    for test in _tests {
+        test.run(max_width);
     }
-
     qemu_close(QemuExitCode::Success);
 }
 
 pub fn test_panic_handler(info: &PanicInfo) -> ! 
 {
-    serial_println!("[failed]\n");
+    serial_println!("\x1b[31m[failed]\x1b[0m\n");
     serial_println!("Error: {}\n", info);
-
     qemu_close(QemuExitCode::Failure);
     loop {}
 }
 
-
-
-// this is the entry point for cargo test
+// =========================
+// Test Entry Points
+// =========================
 #[cfg(test)]
 #[unsafe(no_mangle)]
 pub extern "C" fn _start() -> ! 
 {
+    // intialise IDT
+    init();
+
     test_main();
+    
     loop {}
 }
 
