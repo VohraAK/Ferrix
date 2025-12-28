@@ -1,4 +1,4 @@
-# Ferrix: An OS written in Rust
+# Ferrix: An x86-64 OS written in Rust
 
 Inspired by: [Blog OS](os.phil-opp.com) by Philipp Oppermann.
 
@@ -33,4 +33,11 @@ Inspired by: [Blog OS](os.phil-opp.com) by Philipp Oppermann.
 
 ![Improved Test Outputs](assets/improved_test_outputs.png)
 
+
+<br>
+
+### Double / Triple Fault Handling
+- Initialised a GDT (Global Descriptor Table) and its TSS (Task Segment Selector) entry.
+- Configured the first IST as the **Double Fault Exception Stack**, a dedicated, known-good stack the CPU switches to in the case of double faults, preventing triple faults.
+- Tested with a stack-overflow situation (in `tests/stack_overflow.rs`).
 ---

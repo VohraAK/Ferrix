@@ -19,7 +19,34 @@ pub extern "C" fn _start() -> !
     init();
 
     // BREAKPOINT TEST (trigger int3)
-    x86_64::instructions::interrupts::int3();
+    // x86_64::instructions::interrupts::int3();
+
+    // let's trigger a page fault, to test double fault
+    // unsafe
+    // {
+    //     *(0xfeedbeef as *mut u8) = 69;
+    // }
+    // the above code causes a TRIPLE fault, the system reboots again and again
+    // solved with a double fault handler
+
+    // triggering a stack overflow triple fault
+    // fn overflow()
+    // {
+        // overflow();
+    // }
+    // overflow();
+
+    // this creates a triple fault:
+    // 1) after multiple stack pushes, the guard page is accessed -> stack overflows into guard page -> page fault
+    // 2) page fault handler is accessed and tries to push interrupt stack frame -> stack is still invalid due to guard page -> double page fault
+    // 3) page fault + page fault -> triple fault -> system reboot loop
+    
+    // need to ensure the stack stays valid in this instance -> need a known-good stack to switch to on faults
+    // solved this issue by creating an Interrupt Stack Table...
+    // a static stack was assigned to IST[0]; the CPU switches to this known-good stack for the double fault handler
+    // GDT init with TSS entry, which stores the IST
+    // solves the triple-fault-and-reboot issue
+
 
     // TESTS ENTRY POINT
     #[cfg(test)]

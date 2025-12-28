@@ -12,6 +12,7 @@ use core::panic::PanicInfo;
 pub mod serial;
 pub mod vga_buffer;
 pub mod interrupts;
+pub mod gdt;
 
 // =========================
 // Constants and Enums
@@ -41,7 +42,12 @@ pub fn qemu_close(exit_code: QemuExitCode)
 
 pub fn init()
 {
+    // init idt
     interrupts::init_idt();
+
+    // init gdt (with tss)
+    gdt::init();
+
 }
 
 // =========================
