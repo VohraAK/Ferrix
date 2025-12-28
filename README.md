@@ -48,4 +48,8 @@ Inspired by: [Blog OS](https://os.phil-opp.com) by Philipp Oppermann.
 - Added hardware interrupt support with PIC initialization and handlers for timer and keyboard interrupts.
 - Implemented keyboard input decoding and printing using the `pc_keyboard` crate.
 
+https://github.com/user-attachments/assets/fba59dcb-2c24-4b65-864c-3ee32ed18836
+
 ---
+
+
