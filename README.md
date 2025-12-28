@@ -1,6 +1,6 @@
 # Ferrix: An x86-64 OS written in Rust
 
-Inspired by: [Blog OS](os.phil-opp.com) by Philipp Oppermann.
+Inspired by: [Blog OS](https://os.phil-opp.com/) by Philipp Oppermann.
 
 ---
 ## Devlog
