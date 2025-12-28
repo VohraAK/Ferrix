@@ -40,4 +40,12 @@ Inspired by: [Blog OS](os.phil-opp.com) by Philipp Oppermann.
 - Initialised a GDT (Global Descriptor Table) and its TSS (Task Segment Selector) entry.
 - Configured the first IST as the **Double Fault Exception Stack**, a dedicated, known-good stack the CPU switches to in the case of double faults, preventing triple faults.
 - Tested with a stack-overflow situation (in `tests/stack_overflow.rs`).
+
+<br>
+
+### Interrupts and Keyboard Setup
+
+- Added hardware interrupt support with PIC initialization and handlers for timer and keyboard interrupts.
+- Implemented keyboard input decoding and printing using the `pc_keyboard` crate.
+
 ---

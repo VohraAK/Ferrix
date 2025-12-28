@@ -40,13 +40,27 @@ pub fn qemu_close(exit_code: QemuExitCode)
     }
 }
 
+// hlt
+pub fn hlt_loop() -> !
+{
+    loop {
+        x86_64::instructions::hlt();
+    }
+}
+
 pub fn init()
 {
+    // init PICs
+    interrupts::init_pics();
+
     // init idt
     interrupts::init_idt();
 
     // init gdt (with tss)
     gdt::init();
+
+    // enable interrupts
+    interrupts::enable_interrupts();
 
 }
 
@@ -96,7 +110,7 @@ pub fn test_panic_handler(info: &PanicInfo) -> !
     serial_println!("\x1b[31m[failed]\x1b[0m\n");
     serial_println!("Error: {}\n", info);
     qemu_close(QemuExitCode::Failure);
-    loop {}
+    hlt_loop();
 }
 
 // =========================
@@ -111,7 +125,7 @@ pub extern "C" fn _start() -> !
 
     test_main();
     
-    loop {}
+    hlt_loop();
 }
 
 #[cfg(test)]

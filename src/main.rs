@@ -47,12 +47,18 @@ pub extern "C" fn _start() -> !
     // GDT init with TSS entry, which stores the IST
     // solves the triple-fault-and-reboot issue
 
+    // print deadlock
+    // loop
+    // {
+        // use ferrix::print;
+        // print!("-");
+    // }
 
     // TESTS ENTRY POINT
     #[cfg(test)]
     test_main();
     
-    loop {}
+    hlt_loop();
 }
 
 // panic handlers (test and not test)
@@ -61,7 +67,7 @@ pub extern "C" fn _start() -> !
 fn panic(info: &PanicInfo) -> ! 
 {
     println!("{}", info);
-    loop {}
+    hlt_loop();
 }
 
 #[cfg(test)]
