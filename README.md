@@ -48,6 +48,8 @@ Inspired by: [Blog OS](https://os.phil-opp.com) by Philipp Oppermann.
 - Added hardware interrupt support with PIC initialization and handlers for timer and keyboard interrupts.
 - Implemented keyboard input decoding and printing using the `pc_keyboard` crate.
 
+<video src="assets/timer_1.mp4" autoplay loop muted playsinline width="100%"></video>
+
 ---
 
 
