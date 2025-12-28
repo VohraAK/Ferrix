@@ -75,12 +75,19 @@ where
 
 pub fn test_runner(_tests: &[&dyn Testable]) 
 {
-    serial_println!("Running {} tests", _tests.len());
+    if _tests.len() <= 0
+    {
+        serial_print!("\n[No tests detected]\n\n");
+        qemu_close(QemuExitCode::Success);
+    }
+
+    serial_println!("\nRunning {} tests", _tests.len());
     // Find the maximum test name length
     let max_width = _tests.iter().map(|t| t.name().len()).max().unwrap_or(0);
     for test in _tests {
         test.run(max_width);
     }
+    serial_print!("\n");
     qemu_close(QemuExitCode::Success);
 }
 

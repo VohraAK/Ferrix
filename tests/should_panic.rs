@@ -5,7 +5,7 @@
 #[unsafe(no_mangle)]
 pub extern "C" fn _start() -> ! {
     should_fail();
-    serial_println!("[Test did not panic!]");
+    serial_println!("\x1b[32m[ok]\x1b[0m\n");
     qemu_close(QemuExitCode::Success);
 
     loop {}
@@ -27,6 +27,7 @@ fn panic (_info: &PanicInfo) -> !
 // ---------- TESTS ----------
 fn should_fail()
 {
-    serial_print!("should_panic::should_fail...\t");
+    serial_println!("\nRunning 1 test:");
+    serial_print!("should_panic::should_fail ... ");
     assert_eq!(1, 1);
 }
