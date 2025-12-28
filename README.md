@@ -51,15 +51,16 @@ Inspired by: [Blog OS](https://os.phil-opp.com) by Philipp Oppermann.
 
 #### Initial timer interrupt setup
 
-<video src="https://github.com/VohraAK/Ferrix/raw/main/assets/timer_1.mp4" autoplay loop muted playsinline width="100%">
+<video src="https://github.com/VohraAK/Ferrix/raw/main/assets/timer_2.mp4" autoplay controls width="640">
+  Your browser does not support the video tag.
 </video>
 
-#### Reading and printing raw scancodes from PS/2 data port
-<video src="https://github.com/VohraAK/Ferrix/raw/main/assets/timer_2.mp4" autoplay loop muted playsinline width="100%">
+<!-- #### Reading and printing raw scancodes from PS/2 data port
+<video src="https://github.com/VohraAK/Ferrix/raw/main/assets/timer_2.mp4" autoplay loop muted playsinline width="100%"> -->
 
 
-#### Decoding scancodes using the `pc-keyboard` crate
-<video src="https://github.com/VohraAK/Ferrix/raw/main/assets/timer_3.mp4" autoplay loop muted playsinline width="100%">
+<!-- #### Decoding scancodes using the `pc-keyboard` crate
+<video src="https://github.com/VohraAK/Ferrix/raw/main/assets/timer_3.mp4" autoplay loop muted playsinline width="100%"> -->
 
 
 ---
