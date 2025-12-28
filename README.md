@@ -46,10 +46,20 @@ Inspired by: [Blog OS](https://os.phil-opp.com) by Philipp Oppermann.
 ### Interrupts and Keyboard Setup
 
 - Added hardware interrupt support with PIC initialization and handlers for timer and keyboard interrupts.
-- Implemented keyboard input decoding and printing using the `pc_keyboard` crate.
 
-<video src="assets/timer_1.mp4" autoplay loop muted playsinline width="100%"></video>
+<br>
+
+#### Initial timer interrupt setup
+
+<video src="https://github.com/VohraAK/Ferrix/raw/main/assets/timer_1.mp4" autoplay loop muted playsinline width="100%">
+</video>
+
+#### Reading and printing raw scancodes from PS/2 data port
+<video src="https://github.com/VohraAK/Ferrix/raw/main/assets/timer_2.mp4" autoplay loop muted playsinline width="100%">
+
+
+#### Decoding scancodes using the `pc-keyboard` crate
+<video src="https://github.com/VohraAK/Ferrix/raw/main/assets/timer_3.mp4" autoplay loop muted playsinline width="100%">
+
 
 ---
-
-
