@@ -5,9 +5,12 @@
 #![test_runner(ferrix::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
-use core::panic::PanicInfo;
+extern crate alloc;
+
 use ferrix::*;
+use core::panic::PanicInfo;
 use bootloader::{BootInfo, entry_point};
+use alloc::{boxed::Box, vec::Vec};
 
 entry_point!(kernel_main);
 
@@ -18,9 +21,15 @@ fn kernel_main(boot_info: &'static BootInfo) -> !
 {
     use ferrix::memory;
     use ferrix::memory::BootInfoFrameAllocator;
-    use x86_64::{structures::paging::Page, VirtAddr};
+    use ferrix::allocator;
+    use x86_64::VirtAddr;
 
-    vga_buffer::splash_screen();
+    println!(" ============================================================================== ");
+    println!("                           WELCOME TO FERRIX (v0.1.0)                           ");
+    println!(" ============================================================================== ");
+    println!();
+    println!("   [OK] VGA Buffer initialized");
+    println!("   [OK] Kernel loaded successfully");
 
     // initialise IDT
     init();
@@ -65,13 +74,18 @@ fn kernel_main(boot_info: &'static BootInfo) -> !
 
     let mut frame_allocator = unsafe {BootInfoFrameAllocator::init(&(boot_info.memory_map))};
 
-    // map an unused page
-    let page: Page = Page::containing_address(VirtAddr::new(0xdeadbeef as u64));
-    memory::create_example_mapping(page, &mut mapper, &mut frame_allocator);
+    allocator::init_heap(&mut mapper, &mut frame_allocator).expect("[ERR] Heap initialisation Failed!");
 
-    // write a test string to the screen through this new mapping
-    let page_ptr: *mut usize = page.start_address().as_mut_ptr();
-    unsafe { page_ptr.offset(400).write_volatile(0x_f021_f077_f065_f04e); }
+    println!("   [OK] Heap initialised successfully");
+    println!(" ------------------------------------------------------------------------------ ");
+    
+    // alloc showcase
+    let x = Box::new(420);
+    println!("Heap variable {:?} at {:p}", x, x);
+
+    let mut vec = Vec::new();
+    vec.extend([6, 7]);
+    println!("vec: {:?} at {:p}", vec , vec.as_slice());
 
     // TESTS ENTRY POINT
     #[cfg(test)]

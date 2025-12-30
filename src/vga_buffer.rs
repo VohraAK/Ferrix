@@ -250,14 +250,8 @@ impl Writer
 
 pub fn splash_screen()
 {
-    println!(" ============================================================================== ");
-    println!("                           WELCOME TO FERRIX (v0.1.0)                           ");
-    println!(" ============================================================================== ");
-    println!();
-    println!("   [OK] VGA Buffer initialized");
-    println!("   [OK] Kernel loaded successfully");
-    println!();
-    println!(" ------------------------------------------------------------------------------ ");
+
+    
 }
 
 

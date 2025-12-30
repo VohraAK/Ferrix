@@ -63,5 +63,14 @@ Inspired by: [Blog OS](https://os.phil-opp.com) by Philipp Oppermann.
 
 ![wrote "New!" to screen using mapping in main](assets/write_string_in_vga_map.jpeg)
 
+<br>
+
+#### Heap Initialisation with `linked_list_allocator`
+- Created a heap initialiser which maps all physical frames in a specified virtual address heap region, using `Mapper` and `FrameAllocator<Size4KiB>` instances.
+- Added the `linked_list_allocator` crate as a dependency, and set it as the global allocator.
+
+![Heap Item Showcase](assets/heap_var_showcase.png)
+
+<br>
 
 ---

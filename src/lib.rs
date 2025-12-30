@@ -14,6 +14,9 @@ pub mod vga_buffer;
 pub mod interrupts;
 pub mod gdt;
 pub mod memory;
+pub mod allocator;
+
+extern crate alloc;
 
 #[cfg(test)]
 use bootloader::{BootInfo, entry_point};
@@ -67,6 +70,8 @@ pub fn init()
 
     // enable interrupts
     interrupts::enable_interrupts();
+
+    println!("   [OK] Interrupts enabled")
 
 }
 
