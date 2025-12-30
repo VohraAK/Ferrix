@@ -1,5 +1,5 @@
-use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame};
-use crate::{println, gdt, print};
+use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame, PageFaultErrorCode};
+use crate::{gdt, hlt_loop, print, println};
 use lazy_static::lazy_static;
 use pic8259::ChainedPics;
 use spin::Mutex;
@@ -58,6 +58,9 @@ lazy_static!
         // set keyboard interrupt handler
         idt[InterruptIndex::Keyboard.as_usize()].set_handler_fn(keyboard_interrupt_handler);
 
+        // set page fault
+        idt.page_fault.set_handler_fn(page_fault_handler);
+
         idt
     };
 }
@@ -113,6 +116,7 @@ extern "x86-interrupt" fn timer_interrupt_handler(_stack_frame: InterruptStackFr
     }
 }
 
+// keyboard intterrupt handler
 extern "x86-interrupt" fn keyboard_interrupt_handler(_stack_frame: InterruptStackFrame)
 {
     use pc_keyboard::{layouts, DecodedKey, HandleControl, Keyboard, ScancodeSet1};
@@ -151,6 +155,20 @@ extern "x86-interrupt" fn keyboard_interrupt_handler(_stack_frame: InterruptStac
     {
         PICS.lock().notify_end_of_interrupt(InterruptIndex::Keyboard.as_u8());
     }
+}
+
+// page fault handler
+extern "x86-interrupt" fn page_fault_handler(stack_frame: InterruptStackFrame, error_code: PageFaultErrorCode)
+{
+    use x86_64::registers::control::Cr2;
+
+    // cr2 contains the faulting virtual address
+    println!("[EXCEPTION] Page Fault");
+    println!("Faulting Address: {:?}", Cr2::read());
+    println!("Error Code: {:?}", error_code);
+    println!("{:#?}", stack_frame);
+
+    hlt_loop();
 }
 
 

@@ -46,19 +46,22 @@ Inspired by: [Blog OS](https://os.phil-opp.com) by Philipp Oppermann.
 ### Interrupts and Keyboard Setup
 
 - Added hardware interrupt support with PIC initialization and handlers for timer and keyboard interrupts.
+- Set up the initial timer interrupt to enable periodic system ticks *(each "." represents a timer interrupt).*
+- Implemented reading and printing of raw scancodes from the PS/2 keyboard data port.
+- Added scancode decoding using the `pc-keyboard` crate to convert raw keyboard input into readable characters.
+
+
+![Typing with timer and kbd setup](assets/timer_3.png)
 
 <br>
 
-#### 1. Initial timer interrupt setup
-![alt text](assets/timer_1.png)
 
-#### 2. Reading and printing raw scancodes from PS/2 data port
-![alt text](assets/timer_2.png)
+### Implemented Paging (Complete Physical Address Space)
+- Used the `bootloader` crate to get the memory map of the system.
+- Created a `BootInfoFrameAllocator` struct and implemented the provided `FrameAllocator` trait to map a frame to the VGA frame buffer @`0xb8000`.
+- Used the `OffsetPageTable` abstraction to manage paging and map all usable physical memory regions safely.
 
+![wrote "New!" to screen using mapping in main](assets/write_string_in_vga_map.jpeg)
 
-#### 3. Decoding scancodes using the `pc-keyboard` crate
-![alt text](assets/timer_3.png)
-
-<br>
 
 ---

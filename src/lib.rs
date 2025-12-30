@@ -13,6 +13,12 @@ pub mod serial;
 pub mod vga_buffer;
 pub mod interrupts;
 pub mod gdt;
+pub mod memory;
+
+#[cfg(test)]
+use bootloader::{BootInfo, entry_point};
+#[cfg(test)]
+entry_point!(test_kernel_main);
 
 // =========================
 // Constants and Enums
@@ -116,9 +122,11 @@ pub fn test_panic_handler(info: &PanicInfo) -> !
 // =========================
 // Test Entry Points
 // =========================
+
+
 #[cfg(test)]
 #[unsafe(no_mangle)]
-pub extern "C" fn _start() -> ! 
+fn test_kernel_main(_boot_info: &'static BootInfo) -> ! 
 {
     // intialise IDT
     init();

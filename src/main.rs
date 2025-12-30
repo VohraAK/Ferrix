@@ -7,12 +7,19 @@
 
 use core::panic::PanicInfo;
 use ferrix::*;
+use bootloader::{BootInfo, entry_point};
+
+entry_point!(kernel_main);
 
 
 #[unsafe(no_mangle)]    // DO NOT mangle name of this function!
 // entry point for the linker (looks for _start)
-pub extern "C" fn _start() -> ! 
+fn kernel_main(boot_info: &'static BootInfo) -> ! 
 {
+    use ferrix::memory;
+    use ferrix::memory::BootInfoFrameAllocator;
+    use x86_64::{structures::paging::Page, VirtAddr};
+
     vga_buffer::splash_screen();
 
     // initialise IDT
@@ -21,13 +28,11 @@ pub extern "C" fn _start() -> !
     // BREAKPOINT TEST (trigger int3)
     // x86_64::instructions::interrupts::int3();
 
-    // let's trigger a page fault, to test double fault
+    // let's trigger a page fault
     // unsafe
     // {
     //     *(0xfeedbeef as *mut u8) = 69;
     // }
-    // the above code causes a TRIPLE fault, the system reboots again and again
-    // solved with a double fault handler
 
     // triggering a stack overflow triple fault
     // fn overflow()
@@ -53,6 +58,20 @@ pub extern "C" fn _start() -> !
         // use ferrix::print;
         // print!("-");
     // }
+
+    let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
+
+    let mut mapper = unsafe { memory::init(phys_mem_offset) };
+
+    let mut frame_allocator = unsafe {BootInfoFrameAllocator::init(&(boot_info.memory_map))};
+
+    // map an unused page
+    let page: Page = Page::containing_address(VirtAddr::new(0xdeadbeef as u64));
+    memory::create_example_mapping(page, &mut mapper, &mut frame_allocator);
+
+    // write a test string to the screen through this new mapping
+    let page_ptr: *mut usize = page.start_address().as_mut_ptr();
+    unsafe { page_ptr.offset(400).write_volatile(0x_f021_f077_f065_f04e); }
 
     // TESTS ENTRY POINT
     #[cfg(test)]
