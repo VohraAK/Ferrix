@@ -1,5 +1,7 @@
 # Ferrix: An x86-64 OS written in Rust
 
+This is a code-along project intended for understanding Rust fundamentals, by implementing basic OS components and using existing Rust crates to make a bare-bones x86-64 operating system.
+
 Inspired by: [Blog OS](https://os.phil-opp.com) by Philipp Oppermann.
 
 ---
