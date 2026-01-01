@@ -2,7 +2,69 @@
 
 This is a code-along project intended for understanding Rust fundamentals, by implementing basic OS components and using existing Rust crates to make a bare-bones x86-64 operating system.
 
-Inspired by: [Blog OS](https://os.phil-opp.com) by Philipp Oppermann.
+*Inspired by: [Blog OS](https://os.phil-opp.com) by Philipp Oppermann.*
+
+---
+
+## Setup
+
+### Prerequisites
+
+**1. C compiler**
+- **Linux**: `apt install build-essential` (Debian/Ubuntu) or equivalent
+- **macOS**: `xcode-select --install`
+- **Windows**: Install [Visual Studio Build Tools](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022)
+
+**2. Rust**  
+Install via [rustup](https://rustup.rs/), if you do not already have the Rust compiler:
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && source $HOME/.cargo/env
+```
+
+**3. QEMU**
+- **macOS**: `brew install qemu`
+- **Linux**: `apt install qemu-system-x86` (Debian/Ubuntu) or equivalent
+- **Windows**: Download from [qemu.org](https://www.qemu.org/download/)
+
+### Running the Kernel
+
+**1. Switch to Rust nightly**
+```bash
+rustup default nightly
+```
+
+**2. Install required components**
+```bash
+rustup component add rust-src llvm-tools-preview
+```
+
+**3. Clone the repository**
+```bash
+git clone https://github.com/VohraAK/Ferrix
+cd Ferrix
+```
+
+**4. Install bootimage tool**
+```bash
+cargo install bootimage
+```
+
+**5. Build**
+```bash
+cargo build
+```
+
+**6. Run in QEMU**
+```bash
+cargo run
+```
+
+**7. Run tests**
+```bash
+cargo test
+```
+
+
 
 ---
 ## Devlog
