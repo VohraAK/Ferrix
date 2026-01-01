@@ -11,7 +11,7 @@ This is a code-along project intended for understanding Rust fundamentals, by im
 ### Prerequisites
 
 **1. C compiler**
-- **Linux**: `apt install build-essential` (Debian/Ubuntu) or equivalent
+- **Linux**: `apt install build-essential` (Debian/Ubuntu)
 - **macOS**: `xcode-select --install`
 - **Windows**: Install [Visual Studio Build Tools](https://visualstudio.microsoft.com/downloads/#build-tools-for-visual-studio-2022)
 
